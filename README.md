@@ -1,4 +1,4 @@
-TSPC: An Automatic Tool for Adenocarcinoma of Esophagogastric Junction
+CT-FSFS: An Automatic Tool for Adenocarcinoma of Esophagogastric Junction
 
 The current version is not yet a stable version, and will continue to be improved in the future.
 
