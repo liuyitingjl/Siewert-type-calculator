@@ -1,0 +1,62 @@
+import gradio as gr
+import math
+
+def calculate_flag(shangYuan, xiaYuan, jieheBu, cengHou):
+    # STEP 1
+    step1 = ((shangYuan + xiaYuan) / 2) - (jieheBu + 20/cengHou)
+    
+    if step1 <= 0:
+        return "（Ⅰ/Ⅱ）"
+    
+    # STEP 2
+    step2 = xiaYuan - shangYuan - 40/cengHou
+    
+    if step2 <= 0:
+        return "（Ⅰ/Ⅱ）"
+    
+    # STEP 3
+    step3 = ((shangYuan + xiaYuan) / 2 * 1/math.sin(math.radians(63))) - (jieheBu + 20/cengHou)
+    
+    if step3 > 0:
+        return "（Ⅲ）"
+    else:
+        return "（Ⅰ/Ⅱ）"
+
+# 创建Gradio界面
+with gr.Blocks() as demo:
+    gr.Markdown("# 食管参数计算器")
+    
+    with gr.Row():
+        with gr.Column():
+            # 输入部分
+            shangYuan = gr.Number(label="上缘")
+            xiaYuan = gr.Number(label="下缘")
+            jieheBu = gr.Number(label="结合部")
+            cengHou = gr.Number(label="层厚(mm)", value=0.625)
+            
+        with gr.Column():
+            # 输出部分
+            output = gr.Textbox(label="分型")
+    
+    # 按钮
+    with gr.Row():
+        clear_btn = gr.Button("Clear")
+        submit_btn = gr.Button("Submit", variant="primary")
+    
+    # 事件处理
+    submit_btn.click(
+        fn=calculate_flag,
+        inputs=[shangYuan, xiaYuan, jieheBu, cengHou],
+        outputs=[output]
+    )
+    
+    def clear():
+        return [gr.Number.update(value=None) for _ in range(4)] + [gr.Textbox.update(value="")]
+    
+    clear_btn.click(
+        fn=clear,
+        inputs=[],
+        outputs=[shangYuan, xiaYuan, jieheBu, cengHou, output]
+    )
+
+demo.launch()
